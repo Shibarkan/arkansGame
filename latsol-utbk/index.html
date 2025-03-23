@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Matematika</title>
+    <script type="module" src="game.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 flex justify-center items-center h-screen text-white">
+
+    <!-- Layar Awal -->
+    <div id="startScreen" class="text-center">
+        <h1 class="text-3xl font-bold mb-4">Game Matematika</h1>
+        <input type="text" id="playerName" placeholder="Masukkan Nama" 
+            class="p-2 border rounded text-black">
+        <button id="startGame" 
+            class="mt-4 px-6 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded">
+            Mulai
+        </button>
+    </div>
+
+    <!-- Layar Game -->
+    <div id="gameScreen" class="hidden text-center bg-gray-800 p-6 rounded-lg shadow-lg">
+        <p id="questionNumber" class="text-sm text-gray-400 mb-2">Soal ke: 1</p>
+        <h2 id="question" class="text-xl font-semibold mb-4"></h2>
+        <div id="options" class="grid grid-cols-2 gap-4"></div>
+        <button id="skipButton" 
+            class="mt-4 px-6 py-2 bg-red-500 hover:bg-red-700 text-white font-bold rounded">
+            Nyerah
+        </button>
+    </div>
+
+ <!-- Layar Hasil -->
+<div id="resultScreen" class="hidden text-center bg-gray-800 p-6 rounded-lg shadow-lg">
+    <h2 id="finalScore" class="text-xl font-bold mb-4"></h2>
+
+    <!-- Tambahkan wrapper untuk scrolling -->
+    <div class="overflow-x-auto w-full">
+        <table class="min-w-full border-collapse border border-gray-500 text-sm">
+            <thead>
+                <tr class="bg-gray-700 text-white">
+                    <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">No</th>
+                    <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">Soal</th>
+                    <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">Jawaban Benar</th>
+                    <th class="border border-gray-500 px-4 py-2 whitespace-nowrap">Pembahasan</th>
+                </tr>
+            </thead>
+            <tbody id="resultTable"></tbody>
+        </table>
+    </div>
+
+    <button id="restartButton" 
+        class="mt-4 px-6 py-2 bg-green-500 hover:bg-green-700 text-white font-bold rounded">
+        Kembali
+    </button>
+</div>
+
+
+
+</body>
+</html>

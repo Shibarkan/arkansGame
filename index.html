@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Arkan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="https://i.pinimg.com/474x/40/e6/00/40e600f0be5869b83bfe5fb610a28906.jpg">
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-6">
+    <h1 class="text-4xl font-bold mb-6">Game Arkan</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Game 1: Flappy Block -->
+        <div class="bg-gray-800 p-6 rounded-lg shadow-md text-center">
+            <img src="flappy/component/bird.png" alt="Flappy Block" class="mx-auto mb-4 rounded-lg">
+            <h2 class="text-xl font-bold mb-4">Flappy Block</h2>
+            <button onclick="startFlappy()" class="bg-blue-500 px-4 py-2 rounded text-white hover:bg-blue-600 transition">Mainkan</button>
+        </div>
+
+        <!-- Game 2: Whack-a-Mole -->
+        <div class="bg-gray-800 p-6 rounded-lg shadow-md text-center">
+            <img src="hit-mole/component/mole.png" alt="Whack-a-Mole" class="mx-auto mb-4 rounded-lg">
+            <h2 class="text-xl font-bold mb-4">Whack-a-Mole</h2>
+            <button onclick="startMole()" class="bg-blue-500 px-4 py-2 rounded text-white hover:bg-blue-600 transition">Mainkan</button>
+        </div>
+
+        <!-- Game 3: Memory Card -->
+        <div class="bg-gray-800 p-6 rounded-lg shadow-md text-center">
+            <img src="https://i.pinimg.com/474x/d5/60/ca/d560cad28ab108038d91a73cf4bd2134.jpg" alt="Memory Card" class="mx-auto mb-4 rounded-lg">
+            <h2 class="text-xl font-bold mb-4">Latsol UTBK</h2>
+            <button onclick="startMTK()" class="bg-blue-500 px-4 py-2 rounded text-white hover:bg-blue-600 transition">Mainkan</button>
+        </div>
+    </div>
+    
+    <script>
+        function startFlappy() {
+            window.location.replace("Games/flappy/");
+        }
+        function startMole() {
+            window.location.replace("Games/hit-mole/");
+        }
+        function startMTK() {
+            window.location.replace("Games/latsol-utbk/");
+        }
+    </script>
+</body>
+</html>

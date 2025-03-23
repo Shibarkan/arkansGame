@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="component/bird.png">
+    <style>
+        canvas {
+            background: #70c5ce;
+            display: block;
+            margin: auto;
+            border: 2px solid #000;
+        }
+        #gameOver {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white relative">
+    <h1 class="text-3xl font-bold mb-4">Flappy Bird</h1>
+    <canvas id="flappyCanvas" width="500" height="700"></canvas>
+    <p class="mt-2">Tekan Space untuk Melompat</p>
+    <div id="gameOver" class="text-white">
+        <h2 class="text-2xl font-bold">Game Over</h2>
+        <p id="scoreText" class="mt-2">Skor: 0</p>
+        <button onclick="resetGame()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Coba Lagi</button>
+    </div>
+    
+    <script>
+        const canvas = document.getElementById("flappyCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const bird = new Image();
+        bird.src = "component/bird.png";
+        const pipe = new Image();
+        pipe.src = "component/pipe.png";
+        const pipeRotated = new Image();
+        pipeRotated.src = "component/pipe.png";
+
+        let birdY = 150, gravity = 2, jump = -35, score = 0;
+        let pipes = [{ x: canvas.width, y: Math.random() * 200 + 200 }];
+        let gameOver = false;
+
+        document.addEventListener("keydown", (e) => { if (e.code === "Space" && !gameOver) birdY += jump; });
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            ctx.font = '20px Arial';
+            ctx.fillText('Skor: ' + score, 20, 30);
+
+            // Gambar burung
+            ctx.drawImage(bird, 50, birdY, 40, 40);
+            birdY += gravity;
+
+            // Gambar pipa
+            for (let i = 0; i < pipes.length; i++) {
+                let p = pipes[i];
+                let gap = 170; // Lebar celah antar pipa
+                
+                ctx.drawImage(pipe, p.x, p.y, 60, 300);
+                ctx.save();
+                ctx.translate(p.x + 60, p.y - gap);
+                ctx.scale(1, -1);
+                ctx.drawImage(pipe, 0, 0, 60, 300);
+                ctx.restore();
+                p.x -= 3;
+                
+                if (p.x === 200) {
+                    pipes.push({ x: canvas.width, y: Math.random() * 200 + 250 });
+                    score++;
+                }
+                
+                if (p.x < -60) pipes.shift();
+
+                // Cek tabrakan
+                if (
+                    (50 < p.x + 60 && 50 + 40 > p.x && (birdY < p.y - gap || birdY + 40 > p.y)) || birdY > canvas.height
+                ) {
+                    endGame();
+                }
+            }
+
+            if (!gameOver) requestAnimationFrame(gameLoop);
+        }
+
+        function endGame() {
+            gameOver = true;
+            document.getElementById("gameOver").style.display = "block";
+            document.getElementById("scoreText").textContent = "Skor: " + score;
+        }
+
+        function resetGame() {
+            birdY = 150;
+            pipes = [{ x: canvas.width, y: Math.random() * 200 + 250 }];
+            score = 0;
+            gameOver = false;
+            document.getElementById("gameOver").style.display = "none";
+            gameLoop();
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hit The Mole</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="component/mole.png">
+
+    <style>
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: black;
+            z-index: 10;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 20px;
+        }
+        .cell {
+            width: 120px;
+            height: 120px;
+            background: url('./component/hole.png') no-repeat center center;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 0;
+
+        }
+        .mole {
+            background: url('./component/mole.png') no-repeat center center;
+            background-size: cover;
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            bottom: -100%;
+            transition: bottom 0.3s ease-in-out;
+            z-index: 0;
+        }
+        .mole-show {
+            bottom: 10%;
+            z-index: 0;
+        }
+        .mole-hit {
+            bottom: -100%;
+            transition: bottom 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
+    <h1 class="text-3xl font-bold mb-4">Hit The Mole</h1>
+    <p id="timer" class="mt-2 text-lg">Waktu: 30</p>
+    <p id="score" class="mt-2 text-lg">Skor: 0</p>
+    <div id="moleGrid" class="grid mt-4"></div>
+
+    <div id="difficultyModal" class="modal">
+        <div class="modal-content">
+            <h2>Pilih Tingkat Kesulitan</h2>
+            <label><input type="radio" name="difficulty" value="easy" checked> Mudah</label>
+            <label><input type="radio" name="difficulty" value="medium"> Sedang</label>
+            <label><input type="radio" name="difficulty" value="hard"> Sulit</label>
+            <br><br>
+            <button onclick="startGame()">Mulai</button>
+        </div>
+    </div>
+
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        let gameInterval, moleInterval;
+        let speed = { easy: 1500, medium: 1000, hard: 700 };
+        let difficulty = "easy";
+
+        const grid = document.getElementById("moleGrid");
+        for (let i = 0; i < 9; i++) {
+            let cell = document.createElement("div");
+            cell.classList.add("cell");
+            let mole = document.createElement("div");
+            mole.classList.add("mole");
+            cell.appendChild(mole);
+            grid.appendChild(cell);
+        }
+
+        function spawnMole() {
+            const moles = document.querySelectorAll(".mole");
+            moles.forEach(mole => mole.classList.remove("mole-show", "mole-hit"));
+            const index = Math.floor(Math.random() * 9);
+            moles[index].classList.add("mole-show");
+            setTimeout(() => moles[index].classList.remove("mole-show"), speed[difficulty] - 200);
+        }
+
+        function startGame() {
+            difficulty = document.querySelector("input[name='difficulty']:checked").value;
+            document.getElementById("difficultyModal").style.display = "none";
+            score = 0;
+            timeLeft = 30;
+            document.getElementById("score").textContent = "Skor: " + score;
+            document.getElementById("timer").textContent = "Waktu: " + timeLeft;
+            clearInterval(gameInterval);
+            clearInterval(moleInterval);
+            
+            gameInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    document.getElementById("timer").textContent = "Waktu: " + timeLeft + " detik";
+                } else {
+                    clearInterval(gameInterval);
+                    clearInterval(moleInterval);
+                    document.getElementById("difficultyModal").style.display = "flex";
+                    alert("Permainan selesai! Skor Anda: " + score);
+                }
+            }, 1000);
+
+            moleInterval = setInterval(spawnMole, speed[difficulty]);
+        }
+
+        document.getElementById("moleGrid").addEventListener("click", (e) => {
+            if (e.target.classList.contains("mole")) {
+                score++;
+                document.getElementById("score").textContent = "Skor: " + score;
+                e.target.classList.add("mole-hit");
+                setTimeout(() => e.target.classList.remove("mole-hit"), 300);
+            }
+        });
+    </script>
+</body>
+</html>
